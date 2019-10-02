@@ -1,28 +1,51 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img class="logo" alt="Logo" src="./assets/logo.png">
+    <Add />
+    <Scan v-for="scan in scans" :key="scan.id" :name="scan.name" :subject="scan.subject" :scan_path="scan.scan_path" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
+
+import Add from './components/Add.vue'
+import Scan from './components/Scan.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Add,
+    Scan
+  },
+  data() {
+    return {
+      scans: null
+    }
+  },
+  methods: {
+    getScans() {
+      axios
+        .get('/scan/all')
+        .then(response => (this.scans = response.data))
+      }
+  },
+  mounted() {
+    this.getScans();
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+//import fonts
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
+
+body {
+  background-color: black;
+}
+.logo {
+  display: block;
+  margin: 0px auto;
 }
 </style>
